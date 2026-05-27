@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>Controle Empresa</title>
+
+  <link rel="stylesheet"
+    href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body class="dark">
+
+  <div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+      <div class="logo">
+
+        <span>ITR</span>
+
+        <div>
+
+          <h1>
+            Almoxarifado
+          </h1>
+
+          <p>
+            Sistema interno
+          </p>
+
+        </div>
+
+      </div>
+
+      <button class="menu active"
+        onclick="mostrarSecao('funcionarios', this)">
+
+        Funcionários
+
+      </button>
+
+      <button class="menu"
+        onclick="mostrarSecao('materiais', this)">
+
+        Materiais
+
+      </button>
+
+      <button class="menu"
+        onclick="mostrarSecao('ferramentas', this)">
+
+        Ferramentas
+
+      </button>
+
+      <button class="theme-btn"
+        onclick="trocarTema()">
+
+          Claro  🌗   Escuro
+
+      </button>
+
+    </aside>
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+      <header class="header">
+
+        <div>
+
+          <h2 id="tituloPagina">
+            Funcionários
+          </h2>
+
+          <p>
+            Sistema de controle da empresa
+          </p>
+
+        </div>
+
+      </header>
+
+      <!-- FUNCIONÁRIOS -->
+
+      <section id="funcionarios"
+        class="secao">
+
+        <div class="panel">
+
+          <div class="panel-top">
+
+            <h3>
+              Funcionários
+            </h3>
+
+            <button
+              onclick="abrirSenha('addFuncionario')">
+
+              + Adicionar
+
+            </button>
+
+          </div>
+
+          <div class="form">
+
+            <input
+              id="funcionarioNome"
+              placeholder="Nome"
+            >
+
+            <input
+              id="funcionarioCargo"
+              placeholder="Cargo"
+            >
+
+          </div>
+
+          <input
+            class="pesquisa"
+            id="pesquisaFuncionario"
+            placeholder="Pesquisar funcionário"
+            onkeyup="carregarFuncionarios()"
+          >
+
+          <div id="listaFuncionarios"
+            class="cards">
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- MATERIAIS -->
+
+      <section id="materiais"
+        class="secao oculto">
+
+        <div class="panel">
+
+          <div class="panel-top">
+
+            <h3>
+              Materiais
+            </h3>
+
+            <button
+              onclick="abrirSenha('addMaterial')">
+
+              + Adicionar
+
+            </button>
+
+          </div>
+
+          <div class="form">
+
+            <input
+              id="materialNome"
+              placeholder="Nome do material"
+            >
+
+            <input
+              type="number"
+              id="materialQuantidade"
+              placeholder="Quantidade"
+            >
+
+          </div>
+
+          <input
+            class="pesquisa"
+            id="pesquisaMaterial"
+            placeholder="Pesquisar material"
+            onkeyup="carregarMateriais()"
+          >
+
+          <div id="listaMateriais"
+            class="cards">
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- FERRAMENTAS -->
+
+      <section id="ferramentas"
+        class="secao oculto">
+
+        <div class="panel">
+
+          <div class="panel-top">
+
+            <h3>
+              Ferramentas
+            </h3>
+
+            <button
+              onclick="abrirSenha('addFerramenta')">
+
+              + Adicionar
+
+            </button>
+
+          </div>
+
+          <div class="form">
+
+            <input
+              id="ferramentaNome"
+              placeholder="Nome da ferramenta"
+            >
+
+          </div>
+
+          <input
+            class="pesquisa"
+            id="pesquisaFerramenta"
+            placeholder="Pesquisar ferramenta"
+            onkeyup="carregarFerramentas()"
+          >
+
+          <div id="listaFerramentas"
+            class="cards">
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- MODAL SENHA -->
+
+  <div id="modalSenha"
+    class="modal oculto">
+
+    <div class="modal-box">
+
+      <h2>
+        Senha administrativa
+      </h2>
+
+      <p>
+        Digite a senha para continuar
+      </p>
+
+      <input
+        type="password"
+        id="senhaAdmin"
+        placeholder="Senha"
+      >
+
+      <div class="modal-actions">
+
+        <button class="cancel"
+          onclick="fecharModal()">
+
+          Cancelar
+
+        </button>
+
+        <button
+          onclick="confirmarSenha()">
+
+          Confirmar
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MODAL FERRAMENTA -->
+
+  <div id="modalFerramenta"
+    class="modal oculto">
+
+    <div class="modal-box">
+
+      <h2>
+        Colocar ferramenta em uso
+      </h2>
+
+      <p>
+        Escolha o funcionário
+      </p>
+
+      <select id="funcionarioFerramenta">
+
+        <option value="">
+          Não definido
+        </option>
+
+      </select>
+
+      <div class="modal-actions">
+
+        <button class="cancel"
+          onclick="fecharModalFerramenta()">
+
+          Cancelar
+
+        </button>
+
+        <button
+          onclick="salvarUsoFerramenta()">
+
+          Salvar
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="supabase.js"></script>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
